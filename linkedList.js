@@ -1,0 +1,196 @@
+class Node {
+  constructor(data, nextNode = null) {
+    this.data = data
+    this.nextNode = nextNode
+  }
+
+  toString() {
+    return `<Node data: ${this.data}>`
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null
+    this.__count = 0
+  }
+
+  isEmpty() {
+    return this.head === null
+  }
+  size() {
+    return this.__count
+  }
+  
+  add(data) {
+    let newNode = new Node(data)
+    newNode.nextNode = this.head;
+    this.head = newNode
+    this.__count++;
+  }
+
+  addToEnd(data) {
+    let current = this.head
+    let newNode = new Node(data)
+
+    if (this.__count === 0) {
+      this.head = newNode
+      this.__count++;
+      return true
+    }
+
+    let position = this.__count
+    
+    while (position > 1) {
+      current = current.nextNode
+      position--;
+    }
+    current.nextNode = newNode
+    this.__count++;
+  }
+
+  getAtIndex(index) {
+    if (index > this.__count-1) {
+      throw Error('Index out of range')
+    }
+
+    if (index === 0) {
+      return this.head
+    }
+
+    let current = this.head
+    let position = index
+
+    while (position > 0) {
+      current = current.nextNode
+      position--;
+    }
+    return current
+  }
+
+  insert(data, index) {
+    /* 
+    Inserts a new Node containing data at index position
+    Insertion takes O(1) time but finding the node at the insertion point takes O(n) time.
+
+    Takes overall O(n) time.
+    */
+    if (index === 0) {
+      this.add(data)
+    }
+
+    if (index > 0) {
+      let newNode = new Node(data)
+      let position = index;
+      let current = this.head;
+
+      while (position > 1) {
+        current = current.nextNode
+        position--;
+      }
+      let prev = current;
+      let next = current.nextNode;
+
+      prev.nextNode = newNode;
+      newNode.nextNode = next
+      // add one to length
+      this.__count++;
+    }
+  }
+
+  remove(key) {
+    /* 
+    Removes Node containing data that matches the key
+    Returns the node or null if key doesnt exist
+    Takes O(n) time
+    */
+    let current = this.head; // 0
+    let previous = null;
+    let isFound = false;
+
+    while (current != null && !isFound) {
+      if (current.data === key && current === this.head) {
+        isFound = true
+        this.head = current.nextNode
+      } else if (current.data === key) {
+        isFound = true
+        previous.nextNode = current.nextNode
+      } else {
+        previous = current
+        current = current.nextNode
+      }
+    }
+    // remove one from length
+    this.__count--;
+
+    return current
+  }
+
+  removeAtIndex(index) {
+    let current = this.head
+
+    if (index === 0) {
+      this.head = current.nextNode
+      return current
+    }
+
+    let position = index;
+
+    while (position > 1) {
+      current = current.nextNode
+      position--
+    }
+
+    let prevNode = current
+    current = current.nextNode
+    let nextNode = current.nextNode
+    
+    prevNode.nextNode = nextNode
+
+    // remove one from length
+    this.__count--;
+    return current
+  }
+
+  search(key) {
+    let current = this.head;
+
+    while (current != null) {
+      if (current.data === key) {
+        return current
+      } else {
+        current = current.nextNode
+      }
+    }
+    return false
+  }
+  
+  toString() {
+    const nodes = []
+    let current = this.head
+
+    while (current != null) {
+      if (current === this.head) {
+        nodes.push(`[Head: ${current.data}]`)
+      } else if (current.nextNode === null) {
+        nodes.push(`[Tail: ${current.data}]`)
+      } else {
+        nodes.push(`[${current.data}]`)
+      }
+      current = current.nextNode
+    }
+    return nodes.join(' -> ')
+  }
+}
+
+const l = new LinkedList()
+l.addToEnd(1)
+l.addToEnd(2)
+l.addToEnd(3)
+l.addToEnd(4)
+l.addToEnd(5)
+l.addToEnd(6)
+
+console.log(l.size())
+console.log(l.toString())
+
