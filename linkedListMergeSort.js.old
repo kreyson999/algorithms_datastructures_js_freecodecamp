@@ -1,0 +1,117 @@
+const { LinkedList } = require('./linkedList.js')
+
+
+
+function mergeSort(linkedList) {
+  /* 
+  Sorts a linked list in ascending order
+  - Recursively divide the linked list into sublists containing a single node
+  - Repeatedly merge the sublists to produce sorted sublists until one remains
+
+  Returns a sorted linked list
+  */
+
+  if (linkedList.size() === 1) {
+    return linkedList
+  } else if (linkedList.head === null) {
+    return linkedList
+  }
+
+  const { leftHalf, rightHalf } = split(linkedList)
+  const left = mergeSort(leftHalf)
+  const right = mergeSort(rightHalf)
+
+  return merge(left, right)
+}
+
+function split(linkedList) {
+  /* 
+  Divide the unsorted list at midpoint into sublists
+  */
+  if (linkedList === null || linkedList.head === null) {
+    const leftHalf = linkedList
+    const rightHalf = null
+
+    return { leftHalf, rightHalf }
+  } else {
+    const size = linkedList.size()
+    const mid = Math.floor(size/2)
+    
+    let midNode = linkedList.getAtIndex(mid-1)
+    
+    let leftHalf = linkedList
+    let rightHalf = new LinkedList()
+    rightHalf.head = midNode.nextNode
+    midNode.nextNode = null
+    
+    return { leftHalf, rightHalf }
+  }
+}
+
+function merge(left, right) {
+  /* 
+  Merges two linked lists, sorting by data in nodes
+  Returns a new, merged list
+  */
+
+  // Create a new linked list that contains nodes from
+  // merging left to right
+  let merged = new LinkedList()
+
+  // Add a fake head that is discarded later
+  merged.add(0)
+
+  // Set current to the head of the linked list
+  let current = merged.head
+
+  // Obtain head nodes for left and right linked list
+  let leftHead = left.head
+  let rightHead = right.head
+
+  // Iterate over left and right until we reach the tail node
+  // of either
+  while (leftHead !== null || rightHead !== null) {
+    // if the head node of left is null, were past the tail
+    // add the node from right to merged linked list
+    if (leftHead === null) {
+      current.nextNode = rightHead
+      // call next on right to set loop condition to false
+      rightHead = rightHead.nextNode
+    } else if (rightHead === null) {
+      current.nextNode = leftHead
+      leftHead = leftHead.nextNode
+    } else {
+      // not at either tail node
+      // obtain node data to perform comparision operations
+      let leftData = leftHead.data
+      let rightData = rightHead.data
+
+      if (leftData < rightData) {
+        current.nextNode = leftHead
+        leftHead = leftHead.nextNode
+      } else {
+        current.nextNode = rightHead
+        // move right head to next node
+        rightHead = rightHead.nextNode
+      }
+    }
+    // move current to next node
+    current = current.nextNode
+  }
+  // Discard fake head and set first merged node as head
+  let head = merged.head.nextNode
+  merged.head = head
+
+  return merged
+}
+
+const l = new LinkedList()
+l.add(10)
+l.add(2)
+l.add(44)
+l.add(15)
+l.add(200)
+
+console.log(l.toString())
+const sortedLinkedList = mergeSort(l)
+console.log(sortedLinkedList)

@@ -183,14 +183,17 @@ class LinkedList {
   }
 }
 
-const l = new LinkedList()
-l.addToEnd(1)
-l.addToEnd(2)
-l.addToEnd(3)
-l.addToEnd(4)
-l.addToEnd(5)
-l.addToEnd(6)
+// const l = new LinkedList()
+// l.addToEnd(1)
+// l.addToEnd(2)
+// l.addToEnd(3)
+// l.addToEnd(4)
+// l.addToEnd(5)
+// l.addToEnd(6)
 
-console.log(l.size())
-console.log(l.toString())
+// console.log(l.size())
+// console.log(l.toString())
 
+module.exports =  {
+  LinkedList
+}

@@ -1,3 +1,5 @@
+const { sortedNames } = require('./quickSortStrings')
+
 function binarySearch(list, target) {
   let first = 0;
   let last = list.length - 1;
@@ -24,8 +26,10 @@ const verify = (index) => {
   }
 }
 
-const numbers = [1,2,3,4,5,6,7,8,9,10]
+// const numbers = [1,2,3,4,5,6,7,8,9,10]
 
-verify(binarySearch(numbers, 12));
+// verify(binarySearch(numbers, 12));
 
-verify(binarySearch(numbers, 6));
+// verify(binarySearch(numbers, 6));
+verify(binarySearch(sortedNames, 'Mateusz'))
+verify(binarySearch(sortedNames, 'Piotr'))
